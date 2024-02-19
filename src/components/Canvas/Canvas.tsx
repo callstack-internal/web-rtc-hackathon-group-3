@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import {Snake} from "./Snake.ts";
 
 const colors = [
     null,
@@ -13,14 +14,16 @@ const colors = [
 ];
 
 const config = {
-    width: 640,
-    height: 480
+    width: 1200,
+    height: 1200
 };
 
 type Props = {
     onDraw(ctx?: CanvasRenderingContext2D, frameCount?: number): void
     matrix: number[][]
 }
+
+const snake = new Snake();
 
 function Canvas(props: Props) {
     const canvasRef = useRef(null);
@@ -39,6 +42,8 @@ function Canvas(props: Props) {
 
         // Check if null context has been replaced on component mount
         const render = () => {
+            snake.recalculate()
+
             drawBackground();
 
             frameCount++;
@@ -48,7 +53,7 @@ function Canvas(props: Props) {
             }
             if (props.matrix) {
                 // should be just done in onDraw no time
-                drawMatrix(props.matrix, {x: 0, y: 0});
+                drawMatrix(snake.getMatrix(), {x: 0, y: 0});
             }
 
             animationFrameId = window.requestAnimationFrame(render);
