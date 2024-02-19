@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { CallScreen } from './components/CallScreen';
 import { IdleScreen } from './components/IdleScreen';
+import Canvas, {CanvasBoard} from "./components/Canvas/Canvas.tsx";
 
 type CallStatus = 'idle' | 'calling' | 'in-progress';
 
@@ -11,7 +12,6 @@ function App() {
   const id = useRef(nanoid()).current;
 
   const [status, setStatus] = useState<CallStatus>('idle');
-
   const [reactions, setReactions] = useState<string[]>([]);
 
   const sendReactionRef = useRef<((reaction: string) => void) | null>(null);
@@ -301,14 +301,18 @@ function App() {
   };
 
   if (status === 'in-progress') {
-    return (
+    return (<>
+      <p style={{color: 'white'}}>Here I am</p>
+      <Canvas matrix={[ [2, 2, 2, 2, 2, 2], [4, 4, 4, 4]]} />
       <CallScreen
-        reactions={reactions}
-        onReaction={onReaction}
-        onDisconnect={onDisconnect}
-        remoteRef={remoteRef}
-        localRef={localRef}
+          reactions={reactions}
+          onReaction={onReaction}
+          onDisconnect={onDisconnect}
+          remoteRef={remoteRef}
+          localRef={localRef}
       />
+    </>
+
     );
   }
 
